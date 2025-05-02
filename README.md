@@ -1,6 +1,3 @@
-
-
-<br>
 <p align="center">
 <h1 align="center"><strong>GLEAM: Learning Generalizable Exploration Policy for Active Mapping in Complex 3D Indoor Scene</strong></h1>
   <p align="center">
@@ -29,7 +26,7 @@
 ## 📋 Contents
 1. [About](#-about)
 2. [Getting Started](#-getting-started)
-3. [Model and Benchmark](#-Model-and-Benchmark)
+3. [Benchmark](#Benchmark)
 4. [Citation](#-citation)
 5. [License](#-license)
 
@@ -83,7 +80,7 @@ pip install -e .
 
 ### Data Preparation
 
-<!-- Please refer to the [guide](data/README.md) for downloading and organization. -->
+Please refer to the [guide](https://github.com/zjwzcx/GLEAM-Bench) for more details.
 We provide all the preprocessed data used in our work, including mesh files and ground-truth surface points. We recommend users fill out the form to access the download link [[HERE](https://docs.google.com/forms/d/e/1FAIpQLSdq9aX1dwoyBb31nm8L_Mx5FeaVsr5AY538UiwKqg8LPKX9vg/viewform?usp=sharing)].
 
 The directory structure should be as follows.
@@ -140,17 +137,20 @@ python active_reconstruction/eval/eval_gleam_gleambench.py --sim_device=cuda:0 -
 - \[ \] Release the paper and training code in May.
 - \[ \] Release the evaluation scripts in May.
 
-## 📦 Model and Benchmark
-### Model Overview
+## 📦 Benchmark
+
+More details of GLEAM-Bench can be found in https://github.com/zjwzcx/GLEAM-Bench.
+
+### Overview
 
 <p align="center">
-  <img src="assets/Fig_Method.png" align="center" width="100%">
+  <img src="assets/gleambench.png" align="center" width="100%">
 </p>
 
-### Benchmark Overview
+### Main Results
 
 <p align="center">
-  <img src="assets/exp_main_table.png" align="center" width="100%">
+  <img src="assets/main_result.png" align="center" width="100%">
 </p>
 
 
@@ -167,7 +167,7 @@ If you find our work helpful, please cite it:
 
 If you use our codebase, dataset and benchmark, please kindly cite the original datasets involved in our work. BibTex entries are provided below.
 
-<details><summary>Dataset BibTex</summary>
+<details><summary>**Dataset BibTex**</summary>
 
   ```bibtex
 @inproceedings{chen2024gennbv,
