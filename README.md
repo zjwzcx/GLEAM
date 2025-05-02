@@ -17,7 +17,7 @@
 
 <div id="top" align="center">
 
-[![arXiv](https://img.shields.io/badge/arXiv-2402.16174-blue)](https://arxiv.org/abs/2402.16174)
+<!-- [![arXiv](https://img.shields.io/badge/arXiv-2402.16174-blue)](https://arxiv.org/abs/2402.16174) -->
 [![Data](https://img.shields.io/badge/Code-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM-Bench)
 [![Project](https://img.shields.io/badge/Project-%F0%9F%9A%80-red)](https://xiao-chen.tech/gleam/)
 
@@ -132,11 +132,6 @@ python active_reconstruction/eval/eval_gleam_gleambench.py --sim_device=cuda:0 -
 ```
 
 
-## 📝 TODO List
-- \[x\] Release preprocessed dataset.
-- \[ \] Release the paper and training code in May.
-- \[ \] Release the evaluation scripts in May.
-
 ## 📦 Benchmark
 
 More details of GLEAM-Bench can be found in https://github.com/zjwzcx/GLEAM-Bench.
@@ -144,7 +139,7 @@ More details of GLEAM-Bench can be found in https://github.com/zjwzcx/GLEAM-Benc
 ### Overview
 
 <p align="center">
-  <img src="assets/gleambench.png" align="center" width="100%">
+  <img src="assets/overview_gleambench.png" align="center" width="100%">
 </p>
 
 ### Main Results
@@ -152,6 +147,13 @@ More details of GLEAM-Bench can be found in https://github.com/zjwzcx/GLEAM-Benc
 <p align="center">
   <img src="assets/main_result.png" align="center" width="100%">
 </p>
+
+
+
+## 📝 TODO List
+- \[x\] Release preprocessed dataset.
+- \[ \] Release the paper and training code in May.
+- \[ \] Release the evaluation scripts in May.
 
 
 ## 🔗 Citation
