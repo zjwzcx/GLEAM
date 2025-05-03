@@ -42,13 +42,14 @@ Generalizable active mapping in complex unknown environments remains a critical 
 ### Installation
 
 We test our code under the following environment:
-
+- NVIDIA RTX 3090/4090 (24GB VRAM)
 - Ubuntu 20.04
 - NVIDIA Driver: 545.29.02
 - CUDA 11.3
 - Python 3.8.12
 - PyTorch 1.11.0+cu113
-<!-- - PyTorch3D 0.7.5 -->
+- PyCUDA 2024.1
+
 
 1. Clone this repository.
 
