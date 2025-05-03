@@ -17,9 +17,10 @@
 
 <div id="top" align="center">
 
-<!-- [![arXiv](https://img.shields.io/badge/arXiv-2402.16174-blue)](https://arxiv.org/abs/2402.16174) -->
-[![Data](https://img.shields.io/badge/Code-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM-Bench)
 [![Project](https://img.shields.io/badge/Project-%F0%9F%9A%80-red)](https://xiao-chen.tech/gleam/)
+[![Data](https://img.shields.io/badge/Data-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM-Bench)
+[![arXiv](https://img.shields.io/badge/arXiv-2402.16174-blue)](https://arxiv.org/abs/2402.16174)
+
 
 </div>
 
@@ -43,8 +44,8 @@ Generalizable active mapping in complex unknown environments remains a critical 
 
 We test our code under the following environment:
 - NVIDIA RTX 3090/4090 (24GB VRAM)
-- Ubuntu 20.04
 - NVIDIA Driver: 545.29.02
+- Ubuntu 20.04
 - CUDA 11.3
 - Python 3.8.12
 - PyTorch 1.11.0+cu113
@@ -170,7 +171,7 @@ If you find our work helpful, please cite it:
 
 If you use our codebase, dataset and benchmark, please kindly cite the original datasets involved in our work. BibTex entries are provided below.
 
-<details><summary>**Dataset BibTex**</summary>
+<details><summary>Dataset BibTex</summary>
 
   ```bibtex
 @inproceedings{chen2024gennbv,
