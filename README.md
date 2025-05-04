@@ -154,8 +154,9 @@ More details of GLEAM-Bench can be found in https://github.com/zjwzcx/GLEAM-Benc
 
 ## 📝 TODO List
 - \[x\] Release preprocessed dataset.
-- \[ \] Release the paper and training code in May.
-- \[ \] Release the evaluation scripts in May.
+- \[ \] Release the paper.
+- \[ \] Release the training and evaluation code in May or June, 2025.
+- \[ \] Release the key scripts in June.
 
 
 ## 🔗 Citation
@@ -173,12 +174,22 @@ If you use our codebase, dataset and benchmark, please kindly cite the original 
 
 <details><summary>Dataset BibTex</summary>
 
-  ```bibtex
+```bibtex
 @inproceedings{chen2024gennbv,
   title={GenNBV: Generalizable Next-Best-View Policy for Active 3D Reconstruction},
   author={Chen, Xiao and Li, Quanyi and Wang, Tai and Xue, Tianfan and Pang, Jiangmiao},
   year={2024}
   booktitle={IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+}
+```
+```bibtex
+@inproceedings{rudin2022learning,
+  title={Learning to walk in minutes using massively parallel deep reinforcement learning},
+  author={Rudin, Nikita and Hoeller, David and Reist, Philipp and Hutter, Marco},
+  booktitle={Conference on Robot Learning},
+  pages={91--100},
+  year={2022},
+  organization={PMLR}
 }
 ```
 ```bibtex
@@ -223,7 +234,6 @@ If you use our codebase, dataset and benchmark, please kindly cite the original 
 ```
 </details>
 
-We're very grateful to the codebase of Legged Gym (https://github.com/leggedrobotics/legged_gym).
 
 ## 📄 License
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>
