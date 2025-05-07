@@ -136,7 +136,7 @@ python active_reconstruction/eval/eval_gleam_gleambench.py --sim_device=cuda:0 -
 
 ## 📦 Benchmark
 
-More details of GLEAM-Bench can be found in https://github.com/zjwzcx/GLEAM-Bench.
+More details of GLEAM-Bench can be found in [guide](https://github.com/zjwzcx/GLEAM/blob/master/data/README.md).
 
 ### Overview
 
