@@ -82,7 +82,7 @@ pip install -e .
 
 ### Data Preparation
 
-Please refer to the [guide](https://github.com/zjwzcx/GLEAM-Bench) for more details.
+Please refer to the [guide](https://github.com/zjwzcx/GLEAM/blob/master/data/README.md) for more details.
 We provide all the preprocessed data used in our work, including mesh files and ground-truth surface points. We recommend users fill out the form to access the download link [[HERE](https://docs.google.com/forms/d/e/1FAIpQLSdq9aX1dwoyBb31nm8L_Mx5FeaVsr5AY538UiwKqg8LPKX9vg/viewform?usp=sharing)].
 
 The directory structure should be as follows.
@@ -143,6 +143,11 @@ More details of GLEAM-Bench can be found in https://github.com/zjwzcx/GLEAM-Benc
 <p align="center">
   <img src="assets/overview_gleambench.png" align="center" width="100%">
 </p>
+<p align="center">
+  <img src="assets/statistic.png" align="center" width="100%">
+</p>
+
+
 
 ### Main Results
 
