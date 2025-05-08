@@ -21,26 +21,62 @@
 [![Data](https://img.shields.io/badge/Data-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM-Bench)
 [![arXiv](https://img.shields.io/badge/arXiv-2402.16174-blue)](https://arxiv.org/abs/2402.16174)
 
-
 </div>
+
 
 ## 📋 Contents
 1. [About](#-about)
-2. [Getting Started](#-getting-started)
-3. [Benchmark](#Benchmark)
-4. [Citation](#-citation)
-5. [License](#-license)
+2. [Benchmark](#-benchmark)
+3. [Installation](#-installation)
+4. [Training & Evaluation](#-training-evaluation)
+5. [Citation](#-citation)
+6. [License](#-license)
 
 
 ## 🏠 About
 <div style="text-align: center;">
     <img src="assets/overview.png" alt="Dialogue_Teaser" width=100% >
 </div>
-Generalizable active mapping in complex unknown environments remains a critical challenge for mobile robots. Existing methods, constrained by insufficient training data and conservative exploration strategies, exhibit limited generalizability across scenes with diverse layouts and complex connectivity. To enable scalable training and reliable evaluation, we introduce GLEAM-Bench, the first large-scale benchmark designed for generalizable active mapping with 1,152 diverse 3D scenes from synthetic and real-scan datasets. Building upon this foundation, we propose GLEAM, a unified generalizable exploration policy for active mapping. Its superior generalizability comes mainly from our semantic representations, long-term navigable goals, and randomized strategies. It significantly outperforms state-of-the-art methods, achieving 66.50% coverage (+9.49%) with efficient trajectories and improved mapping accuracy on 128 unseen complex scenes.
+
+Generalizable active mapping in complex unknown environments remains a critical challenge for mobile robots. Existing methods, constrained by insufficient training data and conservative exploration strategies, exhibit limited generalizability across scenes with diverse layouts and complex connectivity. To enable scalable training and reliable evaluation, we introduce **GLEAM-Bench**, the first large-scale benchmark designed for generalizable active mapping with 1,152 diverse 3D scenes from synthetic and real-scan datasets. Building upon this foundation, we propose **GLEAM**, a unified generalizable exploration policy for active mapping. Its superior generalizability comes mainly from our semantic representations, long-term navigable goals, and randomized strategies. It significantly outperforms state-of-the-art methods, achieving 66.50% coverage (+9.49%) with efficient trajectories and improved mapping accuracy on 128 unseen complex scenes.
+<!-- We propose GLEAM, a unified generalizable exploration policy for active mapping. It significantly outperforms state-of-the-art methods, achieving 66.50% coverage (+9.49%) with efficient trajectories and improved mapping accuracy on 128 unseen complex scenes. -->
 
 
-## 📚 Getting Started
-### Installation
+## 📊 Benchmark
+
+<p align="center">
+  <img src="assets/overview_gleambench.png" align="center" width="100%">
+</p>
+<p align="center">
+  <img src="assets/statistic.png" align="center" width="100%">
+</p>
+
+GLEAM-Bench includes 1,152 diverse 3D scenes from synthetic and real-scan datasets for benchmarking generalizable active mapping policies. These curated scene meshes are characterized by near-watertight geometry, diverse floorplan (≥10 types), and complex interconnectivity. We unify these multi-source datasets through filtering, geometric repair, and task-oriented preprocessing. Please refer to the [guide](https://github.com/zjwzcx/GLEAM/blob/master/data/README.md) for more details and scrips.
+
+We provide all the preprocessed data used in our work, including mesh files (in `obj` folder), ground-truth surface points (in `gt` folder) and asset indexing files (in `urdf` folder). We recommend users fill out the form to access the **download link [[HERE](https://docs.google.com/forms/d/e/1FAIpQLSdq9aX1dwoyBb31nm8L_Mx5FeaVsr5AY538UiwKqg8LPKX9vg/viewform?usp=sharing)]**. The directory structure should be as follows. 
+
+
+```
+GLEAM
+├── active_reconstruction
+├── data_gleam
+│   ├── train_stage1_512
+│   │   ├── gt
+│   │   ├── obj
+│   │   ├── urdf
+│   ├── train_stage2_512
+│   │   ├── gt
+│   │   ├── obj
+│   │   ├── urdf
+│   ├── eval_128
+│   │   ├── gt
+│   │   ├── obj
+│   │   ├── urdf
+├── ...
+```
+
+
+## 🛠️ Installation
 
 We test our code under the following environment:
 - NVIDIA RTX 3090/4090 (24GB VRAM)
@@ -68,55 +104,32 @@ pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --e
 ```
 
 3. NVIDIA Isaac Gym Installation: https://developer.nvidia.com/isaac-gym/download
-```
+```bash
 cd isaacgym/python
 pip install -e .
 ```
 
 4. Install GLEAM.
 
-```
+```bash
 pip install -r requirements.txt
 pip install -e .
 ```
 
-### Data Preparation
 
-Please refer to the [guide](https://github.com/zjwzcx/GLEAM/blob/master/data/README.md) for more details.
-We provide all the preprocessed data used in our work, including mesh files and ground-truth surface points. We recommend users fill out the form to access the download link [[HERE](https://docs.google.com/forms/d/e/1FAIpQLSdq9aX1dwoyBb31nm8L_Mx5FeaVsr5AY538UiwKqg8LPKX9vg/viewform?usp=sharing)].
-
-The directory structure should be as follows.
-
-```
-GLEAM
-├── active_reconstruction
-├── data_gleam
-│   ├── train_stage1_512
-│   │   ├── gt
-│   │   ├── obj
-│   │   ├── urdf
-│   ├── train_stage2_512
-│   │   ├── gt
-│   │   ├── obj
-│   │   ├── urdf
-│   ├── eval_128
-│   │   ├── gt
-│   │   ├── obj
-│   │   ├── urdf
-├── ...
-```
+## 🕹️ Training & Evaluation
 
 ### Training
 
-Please run the following command to reproduce the training setting of GLEAM:
+Please run the following command to reproduce the sdandard GLEAM:
 
-```
+```bash
 python active_reconstruction/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=512 --stop_wandb --headless
 ```
 
 [Weights & Bias](https://wandb.ai/site/) (wandb) is highly recommended for analyzing the training logs. If you want to use wandb in our codebase, please paste your wandb API key into `wandb_utils/wandb_api_key_file.txt`. And then you need to run the following command to launch training:
 
-```
+```bash
 python active_reconstruction/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=512 --headless
 ```
 
@@ -129,24 +142,9 @@ If you want to customize a novel training environment, you need to create your e
 
 Please run the following command to evaluate the generalization performance of GLEAM on 128 unseen scenes from the test set of GLEAM-Bench.
 
-```
+```bash
 python active_reconstruction/eval/eval_gleam_gleambench.py --sim_device=cuda:0 --num_envs=128 --stop_wandb=True
 ```
-
-
-## 📦 Benchmark
-
-More details of GLEAM-Bench can be found in [guide](https://github.com/zjwzcx/GLEAM/blob/master/data/README.md).
-
-### Overview
-
-<p align="center">
-  <img src="assets/overview_gleambench.png" align="center" width="100%">
-</p>
-<p align="center">
-  <img src="assets/statistic.png" align="center" width="100%">
-</p>
-
 
 
 ### Main Results
@@ -159,9 +157,9 @@ More details of GLEAM-Bench can be found in [guide](https://github.com/zjwzcx/GL
 
 ## 📝 TODO List
 - \[x\] Release preprocessed dataset.
-- \[ \] Release the paper.
+- \[ \] Release the arXiv paper in May, 2025.
 - \[ \] Release the training and evaluation code in May or June, 2025.
-- \[ \] Release the key scripts in June.
+- \[ \] Release the key scripts in June, 2025.
 
 
 ## 🔗 Citation
@@ -211,7 +209,7 @@ If you use our codebase, dataset and benchmark, please kindly cite the original 
 ```
 ```bibtex
 @inproceedings{xiazamirhe2018gibsonenv,
-  title={Gibson {Env}: real-world perception for embodied agents},
+  title={Gibson Env: real-world perception for embodied agents},
   author={Xia, Fei and R. Zamir, Amir and He, Zhi-Yang and Sax, Alexander and Malik, Jitendra and Savarese, Silvio},
   booktitle={Computer Vision and Pattern Recognition (CVPR), 2018 IEEE Conference on},
   year={2018},
@@ -220,7 +218,7 @@ If you use our codebase, dataset and benchmark, please kindly cite the original 
 ```
 ```bibtex
 @article{khanna2023hssd,
-    author={{Khanna*}, Mukul and {Mao*}, Yongsen and Jiang, Hanxiao and Haresh, Sanjay and Shacklett, Brennan and Batra, Dhruv and Clegg, Alexander and Undersander, Eric and Chang, Angel X. and Savva, Manolis},
+    author={Khanna*, Mukul and Mao*, Yongsen and Jiang, Hanxiao and Haresh, Sanjay and Shacklett, Brennan and Batra, Dhruv and Clegg, Alexander and Undersander, Eric and Chang, Angel X. and Savva, Manolis},
     title={{Habitat Synthetic Scenes Dataset (HSSD-200): An Analysis of 3D Scene Scale and Realism Tradeoffs for ObjectGoal Navigation}},
     journal={arXiv preprint},
     year={2023},

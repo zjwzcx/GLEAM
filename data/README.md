@@ -1,8 +1,8 @@
 # GLEAM-Bench
 <!-- **[Project Page](https://xiao-chen.tech/gleam/) / [arXiv]() / [Code (GLEAM)](https://github.com/zjwzcx/GLEAM)** -->
-[![arXiv](https://img.shields.io/badge/arXiv-2402.16174-blue)](https://arxiv.org/abs/2402.16174)
+<!-- [![arXiv](https://img.shields.io/badge/arXiv-2402.16174-blue)](https://arxiv.org/abs/2402.16174)
 [![Code](https://img.shields.io/badge/Code-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM)
-[![Project](https://img.shields.io/badge/Project-%F0%9F%9A%80-red)](https://xiao-chen.tech/gleam/)
+[![Project](https://img.shields.io/badge/Project-%F0%9F%9A%80-red)](https://xiao-chen.tech/gleam/) -->
 
 
 <!-- ## Overview -->
@@ -24,10 +24,7 @@ Please fill in the [form](https://docs.google.com/forms/d/e/1FAIpQLSdq9aX1dwoyBb
 
 **Consolidated Version (GLEAM)**
 
-We provide all the preprocessed data used in our work, including mesh files and ground-truth surface points.
-
-
-The directory structure should be as follows.
+We provide all the preprocessed data used in our work, , including mesh files (in `obj` folder), ground-truth surface points (in `gt` folder) and asset indexing files (in `urdf` folder). The directory structure should be as follows.
 
 ```
 data_gleam
@@ -44,6 +41,8 @@ data_gleam
 │   ├── obj
 │   ├── urdf
 ```
+
+The standard training process of GLEAM is divided into two stages (i.e. stage1 and stage2), each involving different 512 training indoor scenes. The evaluation involves 128 unseen testing scenes from ProcTHOR, HSSD, Gibson and Matterport3D (cross-dataset generalization).
 
 <!-- > We integrate and distribute ground-truth data from 1,024 training scenes across two stages, maintaining consistency with GLEAM's training configuration. -->
 <!-- >  -->
@@ -105,7 +104,7 @@ If you use our dataset and benchmark, please kindly cite the original datasets i
 ```
 ```bibtex
 @inproceedings{xiazamirhe2018gibsonenv,
-  title={Gibson {Env}: real-world perception for embodied agents},
+  title={Gibson Env: real-world perception for embodied agents},
   author={Xia, Fei and R. Zamir, Amir and He, Zhi-Yang and Sax, Alexander and Malik, Jitendra and Savarese, Silvio},
   booktitle={Computer Vision and Pattern Recognition (CVPR), 2018 IEEE Conference on},
   year={2018},
@@ -114,7 +113,7 @@ If you use our dataset and benchmark, please kindly cite the original datasets i
 ```
 ```bibtex
 @article{khanna2023hssd,
-    author={{Khanna*}, Mukul and {Mao*}, Yongsen and Jiang, Hanxiao and Haresh, Sanjay and Shacklett, Brennan and Batra, Dhruv and Clegg, Alexander and Undersander, Eric and Chang, Angel X. and Savva, Manolis},
+    author={Khanna*, Mukul and Mao*, Yongsen and Jiang, Hanxiao and Haresh, Sanjay and Shacklett, Brennan and Batra, Dhruv and Clegg, Alexander and Undersander, Eric and Chang, Angel X. and Savva, Manolis},
     title={{Habitat Synthetic Scenes Dataset (HSSD-200): An Analysis of 3D Scene Scale and Realism Tradeoffs for ObjectGoal Navigation}},
     journal={arXiv preprint},
     year={2023},
