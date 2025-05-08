@@ -51,7 +51,7 @@ Generalizable active mapping in complex unknown environments remains a critical 
   <img src="assets/statistic.png" align="center" width="100%">
 </p>
 
-GLEAM-Bench includes 1,152 diverse 3D scenes from synthetic and real-scan datasets for benchmarking generalizable active mapping policies. These curated scene meshes are characterized by near-watertight geometry, diverse floorplan (≥10 types), and complex interconnectivity. We unify these multi-source datasets through filtering, geometric repair, and task-oriented preprocessing. Please refer to the [guide](https://github.com/zjwzcx/GLEAM/blob/master/data/README.md) for more details and scrips.
+**GLEAM-Bench** includes 1,152 diverse 3D scenes from synthetic and real-scan datasets for benchmarking generalizable active mapping policies. These curated scene meshes are characterized by near-watertight geometry, diverse floorplan (≥10 types), and complex interconnectivity. We unify these multi-source datasets through filtering, geometric repair, and task-oriented preprocessing. Please refer to the **[guide](https://github.com/zjwzcx/GLEAM/blob/master/data/README.md)** for more details and scrips.
 
 We provide all the preprocessed data used in our work, including mesh files (in `obj` folder), ground-truth surface points (in `gt` folder) and asset indexing files (in `urdf` folder). We recommend users fill out the form to access the **download link [[HERE](https://docs.google.com/forms/d/e/1FAIpQLSdq9aX1dwoyBb31nm8L_Mx5FeaVsr5AY538UiwKqg8LPKX9vg/viewform?usp=sharing)]**. The directory structure should be as follows. 
 
