@@ -66,6 +66,11 @@ data_gleam_raw
 ...
 ```
 
+**Raw Version (With Texture and Part-Level Mesh Layers)**
+
+Due to storage limitations, we will not be releasing scenes with textures or part-level mesh layers. If you want to get the raw version of GLEAM-Bench, we recommend you: 
+- **ProcTHOR**: export the meshes using our provided C# script;
+- **HSSD**, **Gibson**, **Matterport3D**: download the corresponding raw meshes from the original source.
 
 
 ## Export Meshes from Generated Scenes by ProcTHOR
