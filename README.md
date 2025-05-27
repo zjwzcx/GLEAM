@@ -128,7 +128,7 @@ pip install -e .
 
 ### Training
 
-Please run the following command to reproduce the standard two-stage training of GLEAM:
+Please run the following command to reproduce the standard two-stage training of GLEAM.
 
 <!-- ```bash
 python gleam/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=32 --stop_wandb --headless
@@ -138,6 +138,11 @@ python gleam/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=32 --sto
 Stage 1 with 512 scenes:
 ```bash
 python gleam/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=32 --headless
+```
+
+Stage 2 with additional 512 scenes, continually trained based on the pretrained checkpoint (specified by `--ckpt_path`) from stage 1:
+```bash
+python gleam/train/train_gleam_stage2.py --sim_device=cuda:0 --num_envs=32 --headless --ckpt_path=${YOUR_CKPT_PATH}$
 ```
 
 ### Customized Training Environments
