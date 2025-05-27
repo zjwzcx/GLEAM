@@ -19,7 +19,7 @@
 
 [![Project](https://img.shields.io/badge/Project-%F0%9F%9A%80-red)](https://xiao-chen.tech/gleam/)
 [![Data](https://img.shields.io/badge/Data-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM/tree/master/data_gleam)
-[![arXiv](https://img.shields.io/badge/arXiv-2402.16174-blue)](https://arxiv.org/abs/2402.16174)
+[![arXiv](https://img.shields.io/badge/arXiv-2505.20294-blue)](https://arxiv.org/abs/2505.20294)
 
 </div>
 
@@ -152,10 +152,10 @@ If you want to customize a novel training environment, you need to create your e
 
 ### Evaluation
 
-Please run the following command to evaluate the generalization performance of GLEAM on 128 unseen scenes from the test set of GLEAM-Bench.
+Please run the following command to evaluate the generalization performance of GLEAM on 128 unseen scenes from the test set of GLEAM-Bench. The users should specify the checkpoint via `--ckpt_path`.
 
 ```bash
-python gleam/test/test_gleam_gleambench.py --sim_device=cuda:0 --num_envs=32 --stop_wandb=True
+python gleam/test/test_gleam_gleambench.py --sim_device=cuda:0 --num_envs=32 --headless --stop_wandb=True --ckpt_path=${YOUR_CKPT_PATH}$
 ```
 
 
