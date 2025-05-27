@@ -5,7 +5,6 @@
 
 # Node artifact files
 node_modules/
-dist/
 
 # Compiled Java class files
 *.class
@@ -61,6 +60,7 @@ runs
 # other
 *.egg-info
 __pycache__
+venv
 *.cpp
 
 # model
@@ -89,7 +89,6 @@ __pycache__
 
 
 # Image
-!./active_reconstruction/objects
 *.jpg
 *.jpeg
 *.png
@@ -120,7 +119,6 @@ log
 *.urdf
 
 data_gleam/*
-gleam/env_/*
 venv/*
 
 # module

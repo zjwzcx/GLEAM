@@ -27,7 +27,7 @@ class Env_GLEAM_Stage1(Env_GLEAM_Base):
         self.visualize_flag = False     # training
         # self.visualize_flag = True    # visualization
 
-        # self.num_scene = 4 # debug
+        # self.num_scene = 4    # debug
         # print("*"*50, "num_scene: ", self.num_scene, "*"*50)
 
         self.num_scene = 512
@@ -545,7 +545,7 @@ class Env_GLEAM_Stage1(Env_GLEAM_Base):
         new_inactive_env_mask = torch.rand(len(env_ids), device=self.device) <= 1.
 
         if new_inactive_env_mask.sum() != 0:
-            new_inactive_env_ids = env_ids[new_inactive_env_mask]
+            new_inactive_env_ids = env_ids[new_inactive_env_mask]       # active -> inactive
             new_inactive_env_ids_list = new_inactive_env_ids.tolist()   # env_idx to be moving
             num_new_inactive_env_ids = len(new_inactive_env_ids_list)
 

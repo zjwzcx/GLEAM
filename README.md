@@ -124,16 +124,18 @@ pip install -e .
 
 ## 🕹️ Training & Evaluation
 
+[Weights & Bias](https://wandb.ai/site/) (wandb) is highly recommended for analyzing the training logs. If you want to use wandb in our codebase, please paste your wandb API key into `wandb_utils/wandb_api_key_file.txt`. 
+
 ### Training
 
-Please run the following command to reproduce the sdandard GLEAM:
+Please run the following command to reproduce the standard two-stage training of GLEAM:
 
-```bash
+<!-- ```bash
 python gleam/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=32 --stop_wandb --headless
-```
+``` -->
 
-[Weights & Bias](https://wandb.ai/site/) (wandb) is highly recommended for analyzing the training logs. If you want to use wandb in our codebase, please paste your wandb API key into `wandb_utils/wandb_api_key_file.txt`. And then you need to run the following command to launch training:
-
+<!-- And then you need to run the following command to launch training: -->
+Stage 1 with 512 scenes:
 ```bash
 python gleam/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=32 --headless
 ```
