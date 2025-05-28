@@ -18,8 +18,8 @@
 <div id="top" align="center">
 
 [![Project](https://img.shields.io/badge/Project-%F0%9F%9A%80-red)](https://xiao-chen.tech/gleam/)
-[![Data](https://img.shields.io/badge/Data-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM-Bench)
-[![arXiv](https://img.shields.io/badge/arXiv-2402.16174-blue)](https://arxiv.org/abs/2402.16174)
+[![Data](https://img.shields.io/badge/Data-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM/tree/master/data_gleam)
+<a href='https://arxiv.org/abs/2505.20294'><img src='https://img.shields.io/badge/Arxiv-2505.20294-A42C25?style=flat&logo=arXiv&logoColor=A42C25'></a>
 
 </div>
 
@@ -51,15 +51,20 @@ Generalizable active mapping in complex unknown environments remains a critical 
   <img src="assets/statistic.png" align="center" width="100%">
 </p>
 
-**GLEAM-Bench** includes 1,152 diverse 3D scenes from synthetic and real-scan datasets for benchmarking generalizable active mapping policies. These curated scene meshes are characterized by near-watertight geometry, diverse floorplan (≥10 types), and complex interconnectivity. We unify these multi-source datasets through filtering, geometric repair, and task-oriented preprocessing. Please refer to the **[guide](https://github.com/zjwzcx/GLEAM/blob/master/data/README.md)** for more details and scrips.
+**GLEAM-Bench** includes 1,152 diverse 3D scenes from synthetic and real-scan datasets for benchmarking generalizable active mapping policies. These curated scene meshes are characterized by near-watertight geometry, diverse floorplan (≥10 types), and complex interconnectivity. We unify these multi-source datasets through filtering, geometric repair, and task-oriented preprocessing. Please refer to the **[guide](https://github.com/zjwzcx/GLEAM/blob/master/data_gleam/README.md)** for more details and scrips.
 
 We provide all the preprocessed data used in our work, including mesh files (in `obj` folder), ground-truth surface points (in `gt` folder) and asset indexing files (in `urdf` folder). We recommend users fill out the form to access the **download link [[HERE](https://docs.google.com/forms/d/e/1FAIpQLSdq9aX1dwoyBb31nm8L_Mx5FeaVsr5AY538UiwKqg8LPKX9vg/viewform?usp=sharing)]**. The directory structure should be as follows. 
 
 
 ```
 GLEAM
-├── active_reconstruction
+├── README.md
+├── gleam
+│   ├── train
+│   ├── test
+│   ├── ...
 ├── data_gleam
+│   ├── README.md
 │   ├── train_stage1_512
 │   │   ├── gt
 │   │   ├── obj
@@ -119,31 +124,38 @@ pip install -e .
 
 ## 🕹️ Training & Evaluation
 
+[Weights & Bias](https://wandb.ai/site/) (wandb) is highly recommended for analyzing the training logs. If you want to use wandb in our codebase, please paste your wandb API key into `wandb_utils/wandb_api_key_file.txt`. 
+
 ### Training
 
-Please run the following command to reproduce the sdandard GLEAM:
+Please run the following command to reproduce the standard two-stage training of GLEAM.
 
+<!-- ```bash
+python gleam/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=32 --stop_wandb --headless
+``` -->
+
+<!-- And then you need to run the following command to launch training: -->
+Stage 1 with 512 scenes:
 ```bash
-python active_reconstruction/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=512 --stop_wandb --headless
+python gleam/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=32 --headless
 ```
 
-[Weights & Bias](https://wandb.ai/site/) (wandb) is highly recommended for analyzing the training logs. If you want to use wandb in our codebase, please paste your wandb API key into `wandb_utils/wandb_api_key_file.txt`. And then you need to run the following command to launch training:
-
+Stage 2 with additional 512 scenes, continually trained based on the pretrained checkpoint (specified by `--ckpt_path`) from stage 1:
 ```bash
-python active_reconstruction/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=512 --headless
+python gleam/train/train_gleam_stage2.py --sim_device=cuda:0 --num_envs=32 --headless --ckpt_path=${YOUR_CKPT_PATH}$
 ```
 
 ### Customized Training Environments
 
-If you want to customize a novel training environment, you need to create your environment and configuration files in `active_reconstruction/env` and then define the task in `active_reconstruction/__init__.py`.
+If you want to customize a novel training environment, you need to create your environment and configuration files in `gleam/env` and then define the task in `gleam/__init__.py`.
 
 
 ### Evaluation
 
-Please run the following command to evaluate the generalization performance of GLEAM on 128 unseen scenes from the test set of GLEAM-Bench.
+Please run the following command to evaluate the generalization performance of GLEAM on 128 unseen scenes from the test set of GLEAM-Bench. The users should specify the checkpoint via `--ckpt_path`.
 
 ```bash
-python active_reconstruction/eval/eval_gleam_gleambench.py --sim_device=cuda:0 --num_envs=128 --stop_wandb=True
+python gleam/test/test_gleam_gleambench.py --sim_device=cuda:0 --num_envs=32 --headless --stop_wandb=True --ckpt_path=${YOUR_CKPT_PATH}$
 ```
 
 
@@ -156,24 +168,28 @@ python active_reconstruction/eval/eval_gleam_gleambench.py --sim_device=cuda:0 -
 
 
 ## 📝 TODO List
-- \[x\] Release preprocessed dataset.
-- \[ \] Release the arXiv paper in May, 2025.
-- \[ \] Release the training and evaluation code in May or June, 2025.
-- \[ \] Release the key scripts in June, 2025.
+- \[x\] Release GLEAM-Bench (dataset) and the arXiv paper in May, 2025.
+- \[x\] Release the training code in May, 2025.
+- \[x\] Release the evaluation code in June, 2025.
+- \[ \] Release the pretrained checkpoint and key scripts in June, 2025.
 
 
 ## 🔗 Citation
 If you find our work helpful, please cite it:
 
 ```bibtex
-@inproceedings{chen2025gleam,
+@misc{chen2025gleam,
   title={GLEAM: Learning Generalizable Exploration Policy for Active Mapping in Complex 3D Indoor Scenes},
-  author={Chen, Xiao and Wang, Tai and Li, Quanyi and Huang, Tao and Pang, Jiangmiao and Xue, Tianfan},
-  year={2025}
+  author={Xiao Chen and Tai Wang and Quanyi Li and Tao Huang and Jiangmiao Pang and Tianfan Xue},
+  year={2025},
+  eprint={2505.20294},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2505.20294}, 
 }
 ```
 
-If you use our codebase, dataset and benchmark, please kindly cite the original datasets involved in our work. BibTex entries are provided below.
+If you use our codebase, dataset, and benchmark, please kindly cite the original datasets involved in our work. BibTex entries are provided below.
 
 <details><summary>Dataset BibTex</summary>
 

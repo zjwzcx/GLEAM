@@ -81,13 +81,21 @@ We also provide the C# script [[HERE](https://github.com/zjwzcx/Batch-Export-Pro
 
 The GLEAM-Bench dataset comes from the GLEAM paper:
 
-- **arXiv**: TODO
+- **arXiv**: https://arxiv.org/abs/2505.20294
 
 - **Code**: https://github.com/zjwzcx/GLEAM
 
 - **BibTex**:
 ```bibtex
-TODO
+@misc{chen2025gleam,
+  title={GLEAM: Learning Generalizable Exploration Policy for Active Mapping in Complex 3D Indoor Scenes},
+  author={Xiao Chen and Tai Wang and Quanyi Li and Tao Huang and Jiangmiao Pang and Tianfan Xue},
+  year={2025},
+  eprint={2505.20294},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2505.20294}, 
+}
 ```
 
 
