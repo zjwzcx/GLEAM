@@ -19,7 +19,7 @@
 
 [![Project](https://img.shields.io/badge/Project-%F0%9F%9A%80-red)](https://xiao-chen.tech/gleam/)
 [![Data](https://img.shields.io/badge/Data-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM/tree/master/data_gleam)
-[![arXiv](https://img.shields.io/badge/arXiv-2505.20294-blue)](https://arxiv.org/abs/2505.20294)
+<a href='https://arxiv.org/abs/2505.20294'><img src='https://img.shields.io/badge/Arxiv-2505.20294-A42C25?style=flat&logo=arXiv&logoColor=A42C25'></a>
 
 </div>
 
@@ -170,7 +170,7 @@ python gleam/test/test_gleam_gleambench.py --sim_device=cuda:0 --num_envs=32 --h
 ## 📝 TODO List
 - \[x\] Release GLEAM-Bench (dataset) and the arXiv paper in May, 2025.
 - \[x\] Release the training code in May, 2025.
-- \[ \] Release the evaluation code in June, 2025.
+- \[x\] Release the evaluation code in June, 2025.
 - \[ \] Release the pretrained checkpoint and key scripts in June, 2025.
 
 
@@ -189,7 +189,7 @@ If you find our work helpful, please cite it:
 }
 ```
 
-If you use our codebase, dataset and benchmark, please kindly cite the original datasets involved in our work. BibTex entries are provided below.
+If you use our codebase, dataset, and benchmark, please kindly cite the original datasets involved in our work. BibTex entries are provided below.
 
 <details><summary>Dataset BibTex</summary>
 
