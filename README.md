@@ -17,9 +17,9 @@
 
 <div id="top" align="center">
 
-[![Project](https://img.shields.io/badge/Project-%F0%9F%9A%80-red)](https://xiao-chen.tech/gleam/)
-[![Data](https://img.shields.io/badge/Data-GLEAM-<COLOR>.svg)](https://github.com/zjwzcx/GLEAM/tree/master/data_gleam)
-<a href='https://arxiv.org/abs/2505.20294'><img src='https://img.shields.io/badge/Arxiv-2505.20294-A42C25?style=flat&logo=arXiv&logoColor=A42C25'></a>
+<a href='https://arxiv.org/abs/2505.20294' style='padding-left: 0.5rem;'><img src='https://img.shields.io/badge/Arxiv-2505.20294-A42C25?style=flat&logo=arXiv&logoColor=A42C25'></a>
+<a href='https://xiao-chen.tech/gleam/' style='padding-left: 0.5rem;'><img src='https://img.shields.io/badge/Project-Page-blue?style=flat&logo=Google%20chrome&logoColor=blue' alt='Project Page'></a>
+<a href='https://github.com/zjwzcx/GLEAM/tree/master/data_gleam' style='padding-left: 0.5rem;'><img src='https://img.shields.io/badge/Data-GLEAMBench-FE7A16?style=flat&logo=google-sheets&logoColor=A42C25'></a>
 
 </div>
 
