@@ -117,8 +117,8 @@ def main():
     args.task = "eval_gleam_gleambench"
 
     use_wandb = False   # local inference
-    args.headless = True
-    args.num_envs = 32
+    # args.headless = True
+    # args.num_envs = 32
 
     # # debug
     # # args.headless = False  # False: visualization

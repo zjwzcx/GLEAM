@@ -113,156 +113,7 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
         print("Loaded all ground truth data.")
 
     def _init_buffers(self):
-        # load ground truth
-        self._init_load_all()
-
-        # get gym GPU state tensors
-        actor_root_state = self.gym.acquire_actor_root_state_tensor(self.sim)
-        net_contact_forces = self.gym.acquire_net_contact_force_tensor(self.sim)
-        rigid_state = self.gym.acquire_rigid_body_state_tensor(self.sim)
-        self.gym.refresh_actor_root_state_tensor(self.sim)
-        self.gym.refresh_net_contact_force_tensor(self.sim)
-        self.gym.refresh_rigid_body_state_tensor(self.sim)
-        self.skip = int(actor_root_state.shape[0] / self.num_envs)
-
-        # create some wrapper tensors for different slices
-        self.root_states = gymtorch.wrap_tensor(actor_root_state)
-        self.base_pos = self.root_states[::self.skip, 0:3]
-        self.base_quat = self.root_states[::self.skip, 3:7]
-
-        self.contact_forces = gymtorch.wrap_tensor(net_contact_forces).view(self.num_envs, -1, 3)
-        self.rigid_state = gymtorch.wrap_tensor(rigid_state).view(self.num_envs, -1, 13)
-
-        self.rewbuffer = deque(maxlen=100)
-        self.lenbuffer = deque(maxlen=100)
-        self.buffer_size = self.cfg.visual_input.stack
-        self.cur_reward_sum = torch.zeros(self.num_envs, dtype=torch.float, device=self.device)
-        self.cur_episode_length = torch.zeros(self.num_envs, dtype=torch.float, device=self.device)
-
-        # multi-scene setup
-        self.env_to_scene = [env_idx * self.num_scene // self.num_envs \
-                              for env_idx in range(self.num_envs)]
-        self.env_to_scene = torch.tensor(self.env_to_scene, device=self.device)     # [num_env]
-
-        # pose setup
-        rpy_min = torch.tensor([0., 0., 0.], dtype=torch.float32, \
-                               device=self.device).repeat(self.num_scene, 1)
-        rpy_max = torch.tensor([0., 0., 2 * torch.pi], dtype=torch.float32, \
-                               device=self.device).repeat(self.num_scene, 1)
-
-        # clip pose for creating observation space
-        # [num_scene, 6], (x_min, y_min, z_min, roll_min, pitch_min, yaw_min)
-        if self.num_scene >= self.range_gt.shape[0]:
-            self.clip_pose_world_low = torch.cat([self.range_gt[:, 1::2], \
-                                                  rpy_min], dim=1).to(self.device)
-            self.clip_pose_world_up = torch.cat([self.range_gt[:, ::2], \
-                                                 rpy_max], dim=1).to(self.device)
-        else:
-            self.clip_pose_world_low = torch.cat([self.range_gt[:self.num_scene, 1::2], \
-                                                  rpy_min], dim=1).to(self.device)
-            self.clip_pose_world_up = torch.cat([self.range_gt[:self.num_scene, ::2], \
-                                                 rpy_max], dim=1).to(self.device)
-
-        if self.visualize_flag:
-            self.pose_buf_vis = deque(maxlen=self.buffer_size)  # for visualization
-
-        # action space
-        self.actions = torch.tensor(self.cfg.normalization.init_action, 
-                                    dtype=torch.int64, device=self.device).repeat(self.num_envs, 1)
-        self.action_size = self.actions.shape[1]
-        self.clip_actions_low = torch.tensor(self.cfg.normalization.clip_actions_low, 
-                                             dtype=torch.int64, device=self.device)
-        self.clip_actions_up = torch.tensor(self.cfg.normalization.clip_actions_up, 
-                                            dtype=torch.int64, device=self.device)
-
-        # reward functions
-        assert self.buffer_size >= 2, "buffer size should be larger than 2"
-        self.recent_num = 10     # early termination condition
-        self.ratio_threshold_term = 0.98
-        self.ratio_threshold_rew = 0.75
-        self.collision_flag = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
-
-        self.reward_layout_ratio_buf = deque(maxlen=self.buffer_size)   # surface coverage ratio
-        self.reward_layout_ratio_buf.extend(self.buffer_size * [torch.zeros(self.num_envs, device=self.device)])
-
-        # only compute once
-        self.blender2opencv = torch.FloatTensor([[1, 0, 0, 0],
-                                                [0, -1, 0, 0],
-                                                [0, 0, -1, 0],
-                                                [0, 0, 0, 1]]).to(self.device)
-        intrinsics = self.get_camera_intrinsics()   # [3, 3]
-        self.inv_intri = torch.linalg.inv(intrinsics).to(self.device).to(torch.float32)
-
-        height, width = self.cfg.visual_input.camera_height, self.cfg.visual_input.camera_width
-        downsample_factor = 1
-        xs = torch.linspace(0, width-downsample_factor, int(width/downsample_factor), 
-                            dtype=torch.float32, device=self.device)
-        ys = torch.linspace(0, height-downsample_factor, int(height/downsample_factor), 
-                            dtype=torch.float32, device=self.device)
-        ys, xs = torch.meshgrid(ys, xs, indexing='ij')
-        norm_coord_pixel = torch.stack([xs, ys], dim=-1)    # [H, W, 2]
-        norm_coord_pixel = torch.concat((norm_coord_pixel, 
-                                         torch.ones_like(norm_coord_pixel[..., :1], device=self.device)), dim=-1).view(-1, 3)  # [H*W, 3], (u, v, 1)
-        self.norm_coord_pixel_around = norm_coord_pixel.repeat(self.num_cam, 1)   # [num_cam*H*W, 3]
-
-        self._init_buffers_visual()
-
-        # [num_scene] -> [num_env]
-        self.range_gt_scenes = self.range_gt[self.env_to_scene]
-        self.voxel_size_gt_scenes = self.voxel_size_gt[self.env_to_scene]
-        self.num_valid_pixel_gt_scenes = self.num_valid_pixel_gt[self.env_to_scene]
-        self.layout_maps_height_scenes = self.layout_maps_height[self.env_to_scene]
-
-        # pose setup
-        init_poses = torch.zeros(self.num_envs, 6, dtype=torch.float32, device=self.device)
-        for env_idx in range(self.num_envs):
-            scene_idx = self.env_to_scene[env_idx]
-            init_poses[env_idx, :2] = self.init_maps_list[scene_idx][random.randint(0, len(self.init_maps_list[scene_idx])-1)]
-
-        init_poses[:, 2] = self.motion_height
-        self.poses = init_poses.clone()
-        self.pose_size = self.poses.shape[1]
-        self.poses_idx = torch.tensor([self.grid_size//2, self.grid_size//2], 
-                                      dtype=torch.int32, device=self.device).repeat(self.num_envs, 1)
-
-        self.pose_buf = []
-        self.pose_buf += 10 * [self.poses.clone()]
-        # [num_env, buffer_size, action_size]
-        self.world_pose_buf = torch.zeros(self.num_envs, self.buffer_size, self.pose_size, 
-                                            dtype=torch.float32, device=self.device)
-        # [num_env, buffer_size, action_size]
-        self.ego_pose_buf = torch.zeros(self.num_envs, self.buffer_size, self.pose_size,
-                                        dtype=torch.float32, device=self.device)
-
-        self.map_size_tensor = torch.tensor([self.grid_size-1, self.grid_size-1], device=self.device)
-        self.env_idx_tensor = torch.arange(self.num_envs, device=self.device)
-
-        # map representations
-        self.scanned_gt_map = torch.zeros(self.num_envs, self.grid_size, self.grid_size, 
-                                          dtype=torch.float32, device=self.device)
-        self.prob_map = torch.zeros(self.num_envs, self.grid_size, self.grid_size, 
-                                    dtype=torch.float32, device=self.device)
-        self.ego_prob_maps = torch.zeros(self.num_envs, self.grid_size, self.grid_size, 
-                                         dtype=torch.float32, device=self.device)
-        self.occ_maps_tri_cls = torch.zeros(self.num_envs, self.grid_size, self.grid_size, 
-                                            dtype=torch.float32, device=self.device)
-
-        # define a 3x3 convolutional kernel to check 4-connected neighbors
-        self.frontier_kernel = torch.tensor([[0, 1, 0],
-                                            [1, 0, 1],
-                                            [0, 1, 0]], dtype=torch.float32, device=self.device).unsqueeze(0).unsqueeze(0)
-
-        # scene updating strategy
-        self.scene_per_env = self.num_scene // self.num_envs
-        self.inactive_xyz = (self.env_origins[:, 0].max() + 15.,
-                             self.env_origins[:, 1].max() + 15.,
-                             self.env_origins[:, 2].max())
-        self.inactive_xyz = torch.tensor(self.inactive_xyz, device=self.device)
-        self.active_scene_ids = self.env_to_scene.tolist()
-        self.inactive_scene_ids = [scene_idx for scene_idx in range(self.num_scene) \
-                                   if scene_idx not in self.active_scene_ids]
-
-        self.ego_cell_size = 0.1
+        super()._init_buffers()
 
         # visualization
         self.vis_obj_idx = -1
@@ -283,7 +134,7 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
         self.local_paths = [[] for _ in range(self.num_envs)]
         self.scanned_pc_coord = [[] for _ in range(self.num_envs)]
 
-        self.save_path = f'./gleam/scripts/video/eval_gleam_128'
+        self.save_path = f'./gleam/output/eval_gleam_128'
         os.makedirs(self.save_path, exist_ok=True)
 
     def step(self, actions):
@@ -335,13 +186,13 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
         # collision, including rigid body collision and depth collision
         self.reset_buf = self.collision_flag.clone()
 
-        # # meaningless wander
-        # recent_CR_thres = 0.01
+        # meaningless wander
+        recent_CR_thres = 0.01
 
-        # recent_CR = self.reward_layout_ratio_buf[-1] - self.reward_layout_ratio_buf[-self.recent_num]  # [num_envs]
-        # meaningless_wander = (recent_CR < recent_CR_thres)  # [num_envs]
-        # meaningless_wander *= (self.cur_episode_length > self.recent_num)
-        # self.reset_buf |= meaningless_wander.clone()
+        recent_CR = self.reward_layout_ratio_buf[-1] - self.reward_layout_ratio_buf[-self.recent_num]  # [num_envs]
+        meaningless_wander = (recent_CR < recent_CR_thres)  # [num_envs]
+        meaningless_wander *= (self.cur_episode_length > self.recent_num)
+        self.reset_buf |= meaningless_wander.clone()
 
         # max_step
         # self.reset_buf = torch.zeros(self.num_envs, device=self.device, dtype=torch.bool)
@@ -392,14 +243,6 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
             if self.reset_multi_round_chamfer_dist[scene_idx, round_idx-1] == 0.:
                 scanned_pc_coord = torch.cat(self.scanned_pc_coord[env_idx], dim=0).unsqueeze(0)   # [N=1, num_point, 2]
                 scanned_kd_tree = KDTree(scanned_pc_coord[0].cpu().numpy())
-
-                # pcd = o3d.geometry.PointCloud()
-                # pcd.points = o3d.utility.Vector3dVector(torch.cat([self.layout_pc[scene_idx].cpu(), torch.zeros(self.layout_pc[scene_idx].shape[0], 1)], dim=1).numpy())
-                # o3d.io.write_point_cloud(f"{self.save_path}/scene_{scene_idx}_round_{round_idx}_gt.pcd", pcd)
-
-                # pcd_scanned = o3d.geometry.PointCloud()
-                # pcd_scanned.points = o3d.utility.Vector3dVector(torch.cat([scanned_pc_coord[0].cpu(), torch.zeros(scanned_pc_coord[0].shape[0], 1)], dim=1).numpy())
-                # o3d.io.write_point_cloud(f"{self.save_path}/scene_{scene_idx}_round_{round_idx}_scanned.pcd", pcd_scanned)
 
                 # chamfer distance (unit: cm)
                 distance, _ = scanned_kd_tree.query(self.layout_pc[scene_idx].cpu().numpy())

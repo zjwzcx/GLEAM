@@ -117,5 +117,5 @@ class Env_GLEAM_Stage2(Env_GLEAM_Stage1):
             self.reset_once_cr = torch.zeros(self.num_envs, dtype=torch.float32, device=self.device)
             self.local_paths = [[] for _ in range(self.num_envs)]
 
-            self.save_path = f'./gleam/scripts/video/train_stage2_512'
+            self.save_path = f'./gleam/output/train_stage2_512'
             os.makedirs(self.save_path, exist_ok=True)
