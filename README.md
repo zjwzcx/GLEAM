@@ -26,7 +26,7 @@
 
 ## 📋 Contents
 1. [About](#-about)
-2. [Benchmark](#-benchmark)
+2. [Dataset](#-dataset)
 3. [Installation](#-installation)
 4. [Training & Evaluation](#-training-evaluation)
 5. [Citation](#-citation)
@@ -42,7 +42,7 @@ Generalizable active mapping in complex unknown environments remains a critical 
 <!-- We propose GLEAM, a unified generalizable exploration policy for active mapping. It significantly outperforms state-of-the-art methods, achieving 66.50% coverage (+9.49%) with efficient trajectories and improved mapping accuracy on 128 unseen complex scenes. -->
 
 
-## 📊 Benchmark
+## 📊 Dataset
 
 <p align="center">
   <img src="assets/overview_gleambench.png" align="center" width="100%">
