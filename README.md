@@ -17,7 +17,7 @@
 
 <div id="top" align="center">
 
-<a href='https://arxiv.org/abs/2505.20294' style='padding-left: 0.5rem;'><img src='https://img.shields.io/badge/Arxiv-2505.20294-A42C25?style=flat&logo=arXiv&logoColor=A42C25'></a>
+<a href='https://arxiv.org/abs/2505.20294' style='padding-left: 0.5rem;'><img src='https://img.shields.io/badge/arXiv-2505.20294-A42C25?style=flat&logo=arXiv&logoColor=A42C25'></a>
 <a href='https://xiao-chen.tech/gleam/' style='padding-left: 0.5rem;'><img src='https://img.shields.io/badge/Project-Page-blue?style=flat&logo=Google%20chrome&logoColor=blue' alt='Project Page'></a>
 <a href='https://github.com/zjwzcx/GLEAM/tree/master/data_gleam' style='padding-left: 0.5rem;'><img src='https://img.shields.io/badge/Data-GLEAMBench-FE7A16?style=flat&logo=google-sheets&logoColor=A42C25'></a>
 
@@ -168,24 +168,21 @@ python gleam/test/test_gleam_gleambench.py --sim_device=cuda:0 --num_envs=32 --h
 
 
 ## 📝 TODO List
-- \[x\] Release GLEAM-Bench (dataset) and the arXiv paper in May, 2025.
-- \[x\] Release the training code in May, 2025.
-- \[x\] Release the evaluation code in June, 2025.
-- \[ \] Release the pretrained checkpoint and key scripts in June, 2025.
+- \[x\] Release GLEAM-Bench (dataset) and the arXiv paper in May 2025.
+- \[x\] Release the training code in May 2025.
+- \[x\] Release the evaluation code in June 2025.
+- \[ \] Release the pretrained checkpoint and key scripts in June 2025.
 
 
 ## 🔗 Citation
 If you find our work helpful, please cite it:
 
 ```bibtex
-@misc{chen2025gleam,
+@article{chen2025gleam,
   title={GLEAM: Learning Generalizable Exploration Policy for Active Mapping in Complex 3D Indoor Scenes},
-  author={Xiao Chen and Tai Wang and Quanyi Li and Tao Huang and Jiangmiao Pang and Tianfan Xue},
-  year={2025},
-  eprint={2505.20294},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2505.20294}, 
+  author={Chen, Xiao and Wang, Tai and Li, Quanyi and Huang, Tao and Pang, Jiangmiao and Xue, Tianfan},
+  journal={arXiv preprint arXiv:2505.20294},
+  year={2025}
 }
 ```
 
