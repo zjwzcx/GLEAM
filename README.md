@@ -191,6 +191,17 @@ If you use our codebase, dataset, and benchmark, please kindly cite the original
 <details><summary>Dataset BibTex</summary>
 
 ```bibtex
+@article{ai2thor,
+  author={Eric Kolve and Roozbeh Mottaghi and Winson Han and
+          Eli VanderBilt and Luca Weihs and Alvaro Herrasti and
+          Daniel Gordon and Yuke Zhu and Abhinav Gupta and
+          Ali Farhadi},
+  title={{AI2-THOR: An Interactive 3D Environment for Visual AI}},
+  journal={arXiv},
+  year={2017}
+}
+```
+```bibtex
 @inproceedings{chen2024gennbv,
   title={GenNBV: Generalizable Next-Best-View Policy for Active 3D Reconstruction},
   author={Chen, Xiao and Li, Quanyi and Wang, Tai and Xue, Tianfan and Pang, Jiangmiao},
