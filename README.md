@@ -124,7 +124,9 @@ pip install -e .
 
 ## 🕹️ Training & Evaluation
 
-[Weights & Bias](https://wandb.ai/site/) (wandb) is highly recommended for analyzing the training logs. If you want to use wandb in our codebase, please paste your wandb API key into `wandb_utils/wandb_api_key_file.txt`. If you don't want to use wandb, please add --stop_wandb into the following command.
+[Weights & Bias](https://wandb.ai/site/) (wandb) is highly recommended for analyzing the training logs. If you want to use wandb in our codebase, please paste your wandb API key into `wandb_utils/wandb_api_key_file.txt`. If you don't want to use wandb, please add `--stop_wandb` into the following command. 
+
+We provide the standard checkpoints of GLEAM **[HERE](https://mycuhk-my.sharepoint.com/:f:/g/personal/1155204425_link_cuhk_edu_hk/EiOi5TvbO6JJktArhRGZkLsB8i0ghpwwh-lwFwz4GVASQA?e=Sbhzcm)**.
 
 ### Training
 
@@ -140,7 +142,8 @@ Stage 1 with 512 scenes:
 python gleam/train/train_gleam_stage1.py --sim_device=cuda:0 --num_envs=32 --headless
 ```
 
-Stage 2 with additional 512 scenes, continually trained based on the pretrained checkpoint (specified by `--ckpt_path`) from stage 1:
+Stage 2 with additional 512 scenes, continually trained based on the pretrained checkpoint (specified by `--ckpt_path`) from stage 1. Take our released checkpoint as example, `ckpt_path` should be `runs/train_gleam_stage1/models/rl_model_40000000_steps.zip`.
+
 ```bash
 python gleam/train/train_gleam_stage2.py --sim_device=cuda:0 --num_envs=32 --headless --ckpt_path=${YOUR_CKPT_PATH}$
 ```
@@ -171,7 +174,8 @@ python gleam/test/test_gleam_gleambench.py --sim_device=cuda:0 --num_envs=32 --h
 - \[x\] Release GLEAM-Bench (dataset) and the arXiv paper in May 2025.
 - \[x\] Release the training code in May 2025.
 - \[x\] Release the evaluation code in June 2025.
-- \[ \] Release the pretrained checkpoint and key scripts in June 2025.
+- \[x\] Release the key scripts in June 2025.
+- \[ \] Release the pretrained checkpoint in June 2025.
 
 
 ## 🔗 Citation

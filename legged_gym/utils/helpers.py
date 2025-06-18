@@ -697,6 +697,11 @@ def get_args(additional_args=None):
             "name": "--mode",
             "type": int,
         },
+        {
+            "name": "--ckpt_path",
+            "type": str,
+            "default": None,
+        },
     ] + additional_args
     # parse arguments
     args = gymutil.parse_arguments(description="RL Policy", custom_parameters=custom_parameters)
