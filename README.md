@@ -87,10 +87,9 @@ We test our code under the following environment:
 - NVIDIA RTX 3090/4090 (24GB VRAM)
 - NVIDIA Driver: 545.29.02
 - Ubuntu 20.04
-- CUDA 11.3
+- CUDA 11.8
 - Python 3.8.12
-- PyTorch 1.11.0+cu113
-- PyCUDA 2024.1
+- PyTorch 2.0.0+cu118
 
 
 1. Clone this repository.
@@ -105,7 +104,8 @@ cd GLEAM
 ```bash
 conda create -n gleam python=3.8 -y
 conda activate gleam
-pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
+pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 torchaudio==2.0.1+cu118 --extra-index-url https://download.pytorch.org/whl/cu118
+
 ```
 
 3. NVIDIA Isaac Gym Installation: https://developer.nvidia.com/isaac-gym/download
