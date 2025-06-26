@@ -1,7 +1,7 @@
 <p align="center">
 <h1 align="center"><strong>GLEAM: Learning Generalizable Exploration Policy for Active Mapping in Complex 3D Indoor Scene</strong></h1>
   <p align="center">
-    <!--   	<strong>CVPR 2024</strong><br> -->
+      	<strong>ICCV 2025</strong><br>
     <a href='https://xiao-chen.tech/' target='_blank'>Xiao Chen</a>&emsp;
 	  <a href='https://tai-wang.github.io/' target='_blank'>Tai Wang</a>&emsp;
     <a href='https://quanyili.github.io/' target='_blank'>Quanyi Li</a>&emsp;
