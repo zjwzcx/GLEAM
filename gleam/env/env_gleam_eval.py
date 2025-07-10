@@ -388,7 +388,7 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
             self.reset_multi_round_path_length[scene_idx, round_idx] = self.episode_length_buf[env_idx]
             self.reset_num_count_round[scene_idx] += 1
 
-        process = self.reset_num_count_round.sum()
+        process = self.reset_num_count_round.sum().item()
         with tqdm(total=self.num_scene * self.num_eval_round, desc="Evaluating all environments") as pbar:
             pbar.update(process)
 
