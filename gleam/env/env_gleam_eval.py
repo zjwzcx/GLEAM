@@ -108,7 +108,7 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
                                 map_location=self.device)[:self.num_scene]
         init_maps /= 255.
 
-        self.init_maps_list_eval = torch.load("gleam/test/eval_128_init_10.pt")
+        self.init_maps_list = torch.load("gleam/test/eval_128_init_10.pt")
 
         print("Loaded all ground truth data.")
 
@@ -119,12 +119,13 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
         self.vis_obj_idx = -1
         print("Visualization object index: ", self.vis_obj_idx)
 
-        self.reset_once_flag = torch.zeros(self.num_scene, dtype=torch.float32, device=self.device)
-        self.reset_once_cr = torch.zeros(self.num_scene, dtype=torch.float32, device=self.device)
+        self.arange_envs = torch.arange(self.num_envs, device=self.device)
 
         # evaluate on all envs
         self.num_eval_round = 10
         self.reset_num_count_round = torch.zeros(self.num_scene, dtype=torch.float32, device=self.device)    # count the number of finished rounds
+        self.reset_once_flag = torch.zeros(self.num_scene, dtype=torch.float32, device=self.device)
+        self.reset_once_cr = torch.zeros(self.num_scene, dtype=torch.float32, device=self.device)
         self.reset_multi_round_cr = torch.zeros(self.num_scene, self.num_eval_round, dtype=torch.float32, device=self.device)
         self.reset_multi_round_AUC = torch.zeros(self.num_scene, self.num_eval_round, 50, dtype=torch.float32, device=self.device)
         self.reset_multi_round_chamfer_dist = torch.zeros(self.num_scene, self.num_eval_round, dtype=torch.float32, device=self.device)
@@ -340,7 +341,7 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
             round_idx = int(self.reset_num_count_round[scene_idx].item())
             if round_idx == self.num_eval_round:
                 continue
-            self.poses[env_idx, :2] = self.init_maps_list_eval[scene_idx][round_idx]
+            self.poses[env_idx, :2] = self.init_maps_list[scene_idx][round_idx]
         self.poses[:, 2] = self.motion_height
 
         if self.visualize_flag:

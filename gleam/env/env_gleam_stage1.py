@@ -408,18 +408,11 @@ class Env_GLEAM_Stage1(Env_GLEAM_Base):
             max=1, min=0
         )
 
-
         # [num_env, H, W], Update ego_prob_maps that serves as representation
         ego_prob_maps = extract_ego_maps(global_maps=self.occ_maps_tri_cls.clone(),
                                                 cell_sizes=self.voxel_size_gt_scenes[:, :2],
                                                 poses_idx=current_pose_idx,
                                                 ego_cm=self.ego_cell_size)
-
-        # self.visualize_global_and_ego_maps(global_maps=self.occ_maps_tri_cls.clone(),
-        #                                     ego_maps=ego_prob_maps.clone(),
-        #                                     poses_idx=current_pose_idx,
-        #                                     cell_sizes=self.voxel_size_gt_scenes[:, :2],
-        #                                     ego_cm=self.ego_cell_size)
 
         # [num_env, H, W], recognize frontier
         self.ego_prob_maps = ego_prob_maps.clone()
