@@ -10,6 +10,10 @@ from collections import deque
 from gleam.utils.utils import create_e2w_from_poses
 from gleam.env.env_gleam_base import Env_GLEAM_Base
 from gleam.env.env_gleam_stage1 import Env_GLEAM_Stage1
+from gleam.utils.utils import scanned_pts_to_2d_idx, pose_coord_to_2d_idx, \
+                        bresenham_2d, discretize_prob_map, \
+                        extract_ego_maps, compute_frontier_map, \
+                        create_e2w_from_poses
 
 
 class Env_GLEAM_Eval(Env_GLEAM_Stage1):
@@ -108,7 +112,7 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
                                 map_location=self.device)[:self.num_scene]
         init_maps /= 255.
 
-        self.init_maps_list = torch.load("gleam/test/eval_128_init_10.pt")
+        self.init_maps_list = torch.load(gt_path+f"{dataset_name}_{self.grid_size}_init_10.pt")
 
         print("Loaded all ground truth data.")
 
@@ -176,6 +180,89 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
         obs, rewards, dones, infos = self.post_physics_step()
         return obs, rewards, dones, infos
 
+    def update_occ_map_2d(self):
+        # Update camera view matrices
+        extrinsics = self.get_camera_view_matrix() # [num_env*num_cam, 4, 4]
+        c2w = torch.linalg.inv(extrinsics.transpose(-2, -1)) @ self.blender2opencv.unsqueeze(0) # [num_env*num_cam, 4, 4]
+        c2w = c2w.reshape(self.num_envs, self.num_cam, 4, 4)
+        c2w[:, :, :3, 3] -= self.env_origins.unsqueeze(1)
+        self.c2ws = c2w # [num_env, num_cam, 4, 4]
+
+        pts_target = self.back_projection_stack(downsample_factor=1)   # [num_env, num_point, 3], where num_point == num_stack * H * W
+
+        # list of (num_valid_pts_idx, 2), at the height of {self.motion height}
+        pts_idx_all, pts_masks = scanned_pts_to_2d_idx(pts_target=pts_target,
+                                                range_gt_scenes=self.range_gt_scenes,
+                                                voxel_size_scenes=self.voxel_size_gt_scenes,
+                                                motion_height=self.motion_height,
+                                                map_size=self.grid_size,
+                                                return_mask=True)
+
+        for idx in range(self.num_envs):
+            if len(pts_idx_all[idx]) == 0:
+                continue
+
+            self.scanned_pc_coord[idx].append(pts_target[idx][pts_masks[idx]][:, :2])   # 2D point cloud
+
+        # [num_env, 2]
+        self.poses_idx_old = self.poses_idx.to(torch.int32).clone()
+        pose_idx = pose_coord_to_2d_idx(poses=self.poses[:, :2].clone(),    # last_pose_xy
+                                            range_gt_scenes=self.range_gt_scenes,
+                                            voxel_size_scenes=self.voxel_size_gt_scenes,
+                                            map_size=self.grid_size)
+        self.poses_idx = pose_idx.to(torch.int32).clone()
+
+
+        current_pose_idx = self.poses_idx.to(torch.long)    # [num_env, 2]
+        batch_idx = torch.arange(self.num_envs) # [num_env]
+        self.current_pose_state = self.occ_maps_tri_cls[batch_idx, current_pose_idx[:, 0], current_pose_idx[:, 1]].clone()   # [num_env]
+
+
+        self.e2w = create_e2w_from_poses(poses=self.poses,
+                                        device=self.device)    # [num_env, 3, 3]
+
+        for env_idx in range(self.num_envs):
+            pts_idx = pts_idx_all[env_idx]
+
+            if (isinstance(pts_idx, list) and len(pts_idx) == 0) or pts_idx.shape[0] == 0:
+                continue
+
+            # [num_point, 2]
+            ray_cast_paths = bresenham_2d(pts_source=pose_idx[env_idx: env_idx+1],
+                                                pts_target=pts_idx,
+                                                map_size=self.grid_size)
+
+            self.prob_map[env_idx, ray_cast_paths[:, 0], ray_cast_paths[:, 1]] -= 0.05
+            self.prob_map[env_idx, pts_idx[:, 0], pts_idx[:, 1]] = 1.0
+
+
+        # occ_maps: [num_env, H, W] in world coordinate, where {1: occupied, 0: free/unknown}
+        # occ_maps_tri_cls: [num_env, H, W] in world coordinate, where {-1: free, 0: unknown, 1: occupied}
+        occ_maps, self.occ_maps_tri_cls = discretize_prob_map(self.prob_map,
+                                                                threshold_occu=0.5,
+                                                                threshold_free=0.0)
+
+        # [num_env, H, W], Update scanned_gt_map for computing coverage reward
+        self.scanned_gt_map = torch.clip(
+            self.scanned_gt_map + occ_maps * self.layout_maps_height_scenes,
+            max=1, min=0
+        )
+
+        # [num_env, H, W], Update ego_prob_maps that serves as representation
+        ego_prob_maps = extract_ego_maps(global_maps=self.occ_maps_tri_cls.clone(),
+                                                cell_sizes=self.voxel_size_gt_scenes[:, :2],
+                                                poses_idx=current_pose_idx,
+                                                ego_cm=self.ego_cell_size)
+
+        # [num_env, H, W], recognize frontier
+        self.ego_prob_maps = ego_prob_maps.clone()
+
+        ego_occ_masks = (ego_prob_maps != 1.0).to(torch.bool)
+        ego_frontier_masks = compute_frontier_map(ego_prob_maps=ego_prob_maps, frontier_kernel=self.frontier_kernel)
+        ego_frontier_masks = ego_frontier_masks & ego_occ_masks
+
+        self.ego_prob_maps[ego_frontier_masks] = 2.0
+
     def check_termination(self):
         """ Check if environments need to be reset
         Termination conditions:
@@ -187,13 +274,13 @@ class Env_GLEAM_Eval(Env_GLEAM_Stage1):
         # collision, including rigid body collision and depth collision
         self.reset_buf = self.collision_flag.clone()
 
-        # meaningless wander
-        recent_CR_thres = 0.01
+        # # meaningless wander
+        # recent_CR_thres = 0.01
 
-        recent_CR = self.reward_layout_ratio_buf[-1] - self.reward_layout_ratio_buf[-self.recent_num]  # [num_envs]
-        meaningless_wander = (recent_CR < recent_CR_thres)  # [num_envs]
-        meaningless_wander *= (self.cur_episode_length > self.recent_num)
-        self.reset_buf |= meaningless_wander.clone()
+        # recent_CR = self.reward_layout_ratio_buf[-1] - self.reward_layout_ratio_buf[-self.recent_num]  # [num_envs]
+        # meaningless_wander = (recent_CR < recent_CR_thres)  # [num_envs]
+        # meaningless_wander *= (self.cur_episode_length > self.recent_num)
+        # self.reset_buf |= meaningless_wander.clone()
 
         # max_step
         # self.reset_buf = torch.zeros(self.num_envs, device=self.device, dtype=torch.bool)

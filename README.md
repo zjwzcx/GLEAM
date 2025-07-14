@@ -126,7 +126,7 @@ pip install -e .
 
 [Weights & Bias](https://wandb.ai/site/) (wandb) is highly recommended for analyzing the training logs. If you want to use wandb in our codebase, please paste your wandb API key into `wandb_utils/wandb_api_key_file.txt`. If you don't want to use wandb, please add `--stop_wandb` into the following command. 
 
-We provide the standard checkpoints of GLEAM **[HERE](https://mycuhk-my.sharepoint.com/:f:/g/personal/1155204425_link_cuhk_edu_hk/EiOi5TvbO6JJktArhRGZkLsB8i0ghpwwh-lwFwz4GVASQA?e=Sbhzcm)**. Please use the 40k-step checkpoint as the standard. We also provide the Stage 2 checkpoints excluding the 96 Gibson scenes, as this exclusion made the model more robust and stable overall.
+We provide the standard checkpoints of GLEAM **[[HERE](https://mycuhk-my.sharepoint.com/:f:/g/personal/1155204425_link_cuhk_edu_hk/EiOi5TvbO6JJktArhRGZkLsB8i0ghpwwh-lwFwz4GVASQA?e=Sbhzcm)]**. Please use the 40k-step checkpoint as the standard. We also provide the Stage 2 checkpoints excluding the 96 Gibson scenes, as this exclusion made the model more robust and stable overall.
 
 ### Training
 
@@ -158,7 +158,7 @@ If you want to customize a novel training environment, you need to create your e
 Please run the following command to evaluate the generalization performance of GLEAM on 128 unseen scenes from the test set of GLEAM-Bench. The users should specify the checkpoint via `--ckpt_path`.
 
 ```bash
-python gleam/test/test_gleam_gleambench.py --sim_device=cuda:0 --num_envs=32 --headless --stop_wandb=True --ckpt_path=${YOUR_CKPT_PATH}$
+python gleam/test/test_gleam_gleambench.py --sim_device=cuda:0 --num_envs=32 --headless --stop_wandb --ckpt_path=${YOUR_CKPT_PATH}$
 ```
 
 
