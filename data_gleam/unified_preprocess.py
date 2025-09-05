@@ -53,7 +53,7 @@ def points2voxel_grid(points: torch.Tensor, grid_size: torch.Tensor, pts_range: 
                       torch.ones(pts_coord.shape[0], device=points.device))
 
     # Special handling for floor points
-    floor_mask = (pts_coord[:, 2] == pts_coord[:, 2].min()) & (pts_coord[:, 2] == (pts_coord[:, 2].min()+1))
+    floor_mask = (pts_coord[:, 2] == pts_coord[:, 2].min()) | (pts_coord[:, 2] == (pts_coord[:, 2].min()+1))
     pts_coord_floor = pts_coord[floor_mask]
     voxels.index_put_((pts_coord_floor[:, 0], pts_coord_floor[:, 1], pts_coord_floor[:, 2], torch.tensor(3)), 
                       torch.zeros(pts_coord_floor.shape[0], device=points.device))
