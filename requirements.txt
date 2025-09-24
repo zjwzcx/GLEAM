@@ -67,8 +67,6 @@ Markdown==3.4.1
 MarkupSafe==2.1.1
 matplotlib==3.5.3
 matplotlib-inline==0.1.7
-mkl-fft==1.3.1
-mkl-service==2.4.0
 multidict==6.0.2
 narwhals==1.41.0
 nbformat==5.7.0
@@ -94,7 +92,7 @@ oauthlib==3.2.2
 open3d==0.17.0
 opencv-python==4.9.0.80
 opencv-python-headless==4.11.0.86
-packaging==21.3
+packaging==22.0
 pandas==1.3.5
 parso==0.8.4
 pathfinding==1.0.17
@@ -110,7 +108,7 @@ plyfile==0.7.4
 portalocker==3.0.0
 promise==2.3
 prompt_toolkit==3.0.51
-protobuf==4.25.8
+protobuf==3.12.0
 psutil==5.9.4
 ptyprocess==0.7.0
 pure_eval==0.2.3
