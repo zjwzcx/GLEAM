@@ -305,7 +305,7 @@ def scanned_pts_to_2d_idx(pts_target, range_gt_scenes, voxel_size_scenes, motion
         voxel_size_scenes: [num_env, 3]
 
     Return:
-        pts_target_idxs: list of (num_valid_pts_idx, 3), torch.long, used for indexing
+        pts_target_idxs: list of (num_valid_pts_idx, 2), torch.long, used for indexing
     """
     num_env = pts_target.shape[0]
 
@@ -336,7 +336,7 @@ def scanned_pts_to_2d_idx(pts_target, range_gt_scenes, voxel_size_scenes, motion
         # Unique and clip
         valid_pts = torch.unique(valid_pts, dim=0)
         valid_pts = torch.clip(valid_pts, min=0, max=map_size-1)
-        pts_target_idxs.append(valid_pts)
+        pts_target_idxs.append(valid_pts[:, :2])    # [num_valid_pts, 2]
     if return_mask:
         return pts_target_idxs, final_mask
     return pts_target_idxs
