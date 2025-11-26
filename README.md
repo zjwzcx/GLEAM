@@ -179,11 +179,11 @@ python gleam/test/test_gleam_gleambench.py --sim_device=cuda:0 --num_envs=32 --h
 
 ## 🤔 FAQ
 
-1. Is it normal that the program gets stuck for about 5-60 minutes during training and testing?  
+**Q: Is it normal that the program gets stuck for about 5-60 minutes during training and testing? **
    A: This is normal because the simulation environment needs to load 1024 complex 3D scenes (for training) or 128 complex 3D scenes (for evaluation) at once, which is very time-consuming. For initial use, it is recommended to modify the hardcoded parameters ([number of training scenes for stage1](https://github.com/zjwzcx/GLEAM/blob/a58cc8d713f5ebc29877eadcc82b51e7ad175c44/gleam/env/env_gleam_stage1.py#L33) and [number of evaluation scenes](https://github.com/zjwzcx/GLEAM/blob/a58cc8d713f5ebc29877eadcc82b51e7ad175c44/gleam/env/env_gleam_eval.py#L37)) to reduce the number of loaded scenes for a quick run-through.
 
-2. Is it normal that the 3D scenes in the visualization UI have no textures?  
-   This is normal. Textures have been removed from the preprocessed data to speed up simulation and rendering, as RGB/texture information is not required for geometry-level exploration. It's a trade-off to accelerate training, allowing focus on 3D spatial exploration. If you need scenes with textures, we recommend downloading the raw version of GLEAM-Bench. Please refer to the [guide](https://github.com/zjwzcx/GLEAM/blob/master/data_gleam/README.md) for more details.
+**Q: Is it normal that the 3D scenes in the visualization UI have no textures? **
+   A: This is normal. Textures have been removed from the preprocessed data to speed up simulation and rendering, as RGB/texture information is not required for geometry-level exploration. It's a trade-off to accelerate training, allowing focus on 3D spatial exploration. If you need scenes with textures, we recommend downloading the raw version of GLEAM-Bench. Please refer to the [guide](https://github.com/zjwzcx/GLEAM/blob/master/data_gleam/README.md) for more details.
      
 ## 🔗 Citation
 If you find our work helpful, please cite it:
