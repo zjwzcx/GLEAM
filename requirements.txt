@@ -155,7 +155,7 @@ tqdm==4.64.1
 traitlets==5.14.3
 triton==2.0.0
 typing_extensions==4.13.2
-urllib3==1.26.12
+urllib3==2.6.3
 wandb==0.20.1
 wcwidth==0.2.13
 Werkzeug==2.2.3
