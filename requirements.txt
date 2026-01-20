@@ -1,6 +1,5 @@
 absl-py==1.3.0
 addict==2.4.0
-aiohttp==3.13.3
 aiosignal==1.2.0
 annotated-types==0.7.0
 asttokens==3.0.0
@@ -155,7 +154,7 @@ tqdm==4.64.1
 traitlets==5.14.3
 triton==2.0.0
 typing_extensions==4.13.2
-urllib3==2.6.3
+urllib3==1.26.12
 wandb==0.20.1
 wcwidth==0.2.13
 Werkzeug==2.2.3
