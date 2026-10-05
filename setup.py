@@ -28,7 +28,6 @@ setup(
         "tensorboard",
         "cloudpickle",
         "pandas",
-        "yapf~=0.30.0",
         "wandb",
         "opencv-python>=3.0.0"
     ],
